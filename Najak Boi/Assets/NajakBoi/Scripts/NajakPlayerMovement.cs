@@ -38,7 +38,6 @@ namespace NajakBoi.Scripts
         {
             //TODO IMPLEMENT NEW INPUT SYSTEM
             var kb = Keyboard.current;
-            _horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
 
             if (kb.spaceKey.wasPressedThisFrame && controller.m_Grounded)
             {
@@ -80,6 +79,10 @@ namespace NajakBoi.Scripts
             anim.SetTrigger(HasLanded);
         }
 
+        public void Move(InputAction.CallbackContext ctx)
+        {
+            _horizontalMove = ctx.ReadValue<Vector2>().x;
+        }
 
         private IEnumerator ChargeJump()
         {

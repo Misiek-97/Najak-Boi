@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using NajakBoi.Scripts;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,12 +6,12 @@ using Random = UnityEngine.Random;
 
 public class NajakBoiGameController : MonoBehaviour
 {
-    public GameObject deutPrefab;
-    public GameObject deut2Prefab;
+    public GameObject najakPrefab;
+    public GameObject najak2Prefab;
     public TerrainGenerator generator;
-    public static GameObject Deut;
-    public static GameObject Deut2;
-    public static bool switchingDeuts;
+    public static GameObject Najak;
+    public static GameObject Najak2;
+    public static bool switchingNajaks;
 
     public static NajakBoiGameController Instance;
 
@@ -24,10 +22,10 @@ public class NajakBoiGameController : MonoBehaviour
 
     void Start()
     {
-        Deut = GameObject.Find("Deut");
-        SmoothCamera.Target = Deut.transform;
+        Najak = GameObject.Find("NajakBoi");
+        SmoothCamera.Target = Najak.transform;
         
-        Deut2 = GameObject.Find("Deut2");
+        Najak2 = GameObject.Find("NajakBoi2");
     }
     
     public void Restart()
@@ -35,25 +33,25 @@ public class NajakBoiGameController : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    public void RespawnDeut()
+    public void RespawnNajak()
     {
-        if(Deut)
-            Destroy(Deut);
+        if(Najak)
+            Destroy(Najak);
 
         var spawnPos = new Vector3(Random.Range(3, generator.terrainWidth - 3), generator.terrainHeight - 3, 0);
-        Deut = Instantiate(deutPrefab, spawnPos, Quaternion.identity);
-        Deut.name = "Deut";
-        SmoothCamera.Target = Deut.transform;
+        Najak = Instantiate(najakPrefab, spawnPos, Quaternion.identity);
+        Najak.name = "NajakBoi";
+        SmoothCamera.Target = Najak.transform;
     }    
     
-    public void RespawnDeut2()
+    public void RespawnNajak2()
     {
-        if(Deut2)
-            Destroy(Deut2);
+        if(Najak2)
+            Destroy(Najak2);
 
         var spawnPos = new Vector3(Random.Range(3, 50 + generator.terrainWidth - 3), generator.terrainHeight - 3, 0);
-        Deut2 = Instantiate(deut2Prefab, spawnPos, Quaternion.identity);
-        Deut2.name = "Deut2";
+        Najak2 = Instantiate(najak2Prefab, spawnPos, Quaternion.identity);
+        Najak2.name = "NajakBoi2";
     }
     
     public void RegenerateTerrain()
@@ -63,7 +61,7 @@ public class NajakBoiGameController : MonoBehaviour
 
     public void SwitchPlayers(Transform previous)
     {
-        switchingDeuts = true;
+        switchingNajaks = true;
         StartCoroutine(WaitSwitchPlayers(previous));
     }
     IEnumerator WaitSwitchPlayers(Transform previous)
@@ -73,18 +71,18 @@ public class NajakBoiGameController : MonoBehaviour
         SmoothCamera.Target = previous;
         yield return new WaitForSeconds(2.0f);
         
-        var isDeut = SmoothCamera.Target == Deut.transform;
-        var isDeut2 = SmoothCamera.Target == Deut2.transform;
+        var isNajak = SmoothCamera.Target == Najak.transform;
+        var isNajak2 = SmoothCamera.Target == Najak2.transform;
         
-        if (isDeut)
-            SmoothCamera.Target = Deut2.transform;
-        else if (isDeut2)
-            SmoothCamera.Target = Deut.transform;
+        if (isNajak)
+            SmoothCamera.Target = Najak2.transform;
+        else if (isNajak2)
+            SmoothCamera.Target = Najak.transform;
         else
         {
-            Debug.Log(SmoothCamera.Target + " target is neither Deut nor Deut2");
+            Debug.Log(SmoothCamera.Target + " target is neither Najak nor Najak2");
         }
 
-        switchingDeuts = false;
+        switchingNajaks = false;
     }
 }

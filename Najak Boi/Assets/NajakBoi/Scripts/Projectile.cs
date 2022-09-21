@@ -40,7 +40,7 @@ namespace NajakBoi.Scripts
                 yield return new WaitForSeconds(0.1f);
                 spriteRenderer.color = Color.white;
                 yield return new WaitForSeconds(0.1f);
-            
+                
             }
             
             Detonate();
@@ -50,6 +50,8 @@ namespace NajakBoi.Scripts
         {
             if (SmoothCamera.Camera.orthographicSize > 15.0f)
                 SmoothCamera.Camera.orthographicSize -= Time.deltaTime * 2.5f;
+            if (detonateDelay > 0)
+                detonateDelay -= Time.deltaTime;
         }
         private void OnCollisionEnter2D(Collision2D other)
         {
@@ -65,7 +67,7 @@ namespace NajakBoi.Scripts
             var hits = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), radius);
             foreach (var hit in hits)
             {
-                if (!hit.CompareTag("Najak")) continue;
+                if (!hit.CompareTag("NajakBoi")) continue;
                 
                 var najak = hit.gameObject.GetComponent<NajakPlayer>();
                 najak.hp -= 10;

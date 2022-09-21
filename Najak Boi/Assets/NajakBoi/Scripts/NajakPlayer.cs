@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 namespace NajakBoi.Scripts
 {
@@ -15,11 +16,13 @@ namespace NajakBoi.Scripts
         public Rigidbody2D rb;
         void Update()
         {
-            if (EventSystem.current.IsPointerOverGameObject() || SmoothCamera.Target != transform || Projectile.Instance != null || NajakBoiGameController.switchingDeuts) return;
-        
-            if (Input.GetButton("Fire1"))
+            if (EventSystem.current.IsPointerOverGameObject() || SmoothCamera.Target != transform || Projectile.Instance != null || NajakBoiGameController.switchingNajaks) return;
+
+            var m = Mouse.current;
+            
+            if (m.leftButton.isPressed)
             {
-                var clickedPos = SmoothCamera.Camera.ScreenToWorldPoint(Input.mousePosition);
+                var clickedPos = SmoothCamera.Camera.ScreenToWorldPoint(m.position.ReadValue());
                 clickedPos.z = 0;
 
                 var heading = clickedPos - transform.position;
@@ -34,7 +37,7 @@ namespace NajakBoi.Scripts
 
             }
 
-            if (!Input.GetButtonUp("Fire1")) return;
+            if (!m.leftButton.wasReleasedThisFrame) return;
             if (bombs > 0)
                 ThrowBomb(_dir);
         }
@@ -56,6 +59,7 @@ namespace NajakBoi.Scripts
             bombs--;
             _throwCharge = 0.0f;
         }
+        
     
     }
 }
